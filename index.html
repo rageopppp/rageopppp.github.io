@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RageOP | Video Editor in Karachi</title>
+<meta name="description" content="Video editor in Karachi, Pakistan. Reels and long-form videos edited in Premiere Pro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0605;
+  --panel: #130c0a;
+  --line: #2b1c17;
+  --fg: #f6efe9;
+  --muted: #a99a90;
+  --ember: #ff5a1f;
+  --ember-2: #ff8a3d;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--ember-2); outline-offset: 3px; }
+.gutter { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1160px; margin: 0 auto; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; isolation: isolate; padding-bottom: 56px; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; z-index: -2; left: -12%; top: -22%; width: 62vw; height: 62vw; max-width: 760px; max-height: 760px;
+  background: radial-gradient(circle at 40% 40%, rgb(255 98 30 / .95), rgb(255 90 31 / .45) 38%, transparent 68%);
+  filter: blur(18px);
+}
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: repeating-linear-gradient(90deg, rgb(255 255 255 / .018) 0 2px, transparent 2px 22px);
+  mask-image: linear-gradient(#000, transparent 85%);
+}
+#stars { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; opacity: .8; }
+
+.nav { position: sticky; top: calc(14px + env(safe-area-inset-top, 0px)); z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 16px; max-width: 1100px; margin: 14px auto 0; padding: 10px 12px 10px 20px; border-radius: 999px; background: rgb(20 12 10 / .62); backdrop-filter: blur(14px); border: 1px solid rgb(255 255 255 / .06); }
+.logo { display: inline-flex; align-items: center; gap: 10px; font: 700 20px/1 var(--font-display); letter-spacing: -.02em; }
+.logo i { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--ember-2), var(--ember)); position: relative; flex: none; }
+.logo i::after { content: ""; position: absolute; left: 10px; top: 7px; border-left: 9px solid #fff; border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
+.links { display: flex; gap: 28px; color: var(--muted); font-size: 15px; }
+.links a:hover { color: var(--fg); }
+.btn { display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; padding: 11px 20px; font-weight: 500; font-size: 15px; border: 1px solid transparent; transition: transform .15s, filter .15s, background .15s; white-space: nowrap; }
+.btn:hover { transform: translateY(-1px); }
+.btn.white { background: #fff; color: #120a07; }
+.btn.ember { background: linear-gradient(180deg, var(--ember-2), var(--ember)); color: #fff; box-shadow: 0 8px 26px rgb(255 90 31 / .3), inset 0 1px 0 rgb(255 255 255 / .35); }
+.btn.ghost { border-color: rgb(255 120 60 / .5); background: rgb(255 90 31 / .08); color: var(--fg); }
+.btn.ghost:hover { background: rgb(255 90 31 / .16); }
+.arrow { width: 14px; height: 14px; }
+
+.hero-copy { text-align: center; padding-top: clamp(48px, 8vw, 96px); max-width: 880px; margin: 0 auto; }
+.badge { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: rgb(255 255 255 / .06); border: 1px solid rgb(255 255 255 / .08); color: var(--ember-2); }
+h1 { font: 600 clamp(38px, 6.6vw, 76px)/1.04 var(--font-display); letter-spacing: -.035em; margin: 26px 0 0; text-wrap: balance; }
+h1 em { font-style: normal; background: linear-gradient(90deg, var(--ember-2), var(--ember)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.sub { color: var(--muted); font-size: clamp(16px, 1.6vw, 19px); max-width: 640px; margin: 22px auto 0; text-wrap: pretty; }
+.cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+
+/* ---------- animated text strip ---------- */
+.ticker { position: relative; margin: 52px calc(50% - 50vw) 0; overflow: hidden; padding-block: 14px;
+  background: linear-gradient(90deg, var(--ember), var(--ember-2) 50%, var(--ember));
+  box-shadow: 0 0 60px rgb(255 90 31 / .35), inset 0 1px 0 rgb(255 255 255 / .35), inset 0 -1px 0 rgb(0 0 0 / .25); }
+.ticker::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / .38) 50%, transparent 62%); background-size: 260% 100%; background-position: 130% 0; animation: sheen 5.5s ease-in-out infinite; }
+.tick-track { display: flex; width: max-content; animation: tick 34s linear infinite; }
+.tick-group { display: flex; align-items: center; flex: none; }
+.tick-group .w { display: inline-block; padding-inline: 4px; color: #1d0b05; text-transform: uppercase; white-space: nowrap;
+  font: 700 clamp(22px, 3.4vw, 38px)/1.1 var(--font-display); letter-spacing: -.01em;
+  animation: pop 4.2s ease-in-out infinite; animation-delay: calc(var(--k) * .45s); }
+.tick-group .st { flex: none; margin-inline: clamp(18px, 3vw, 34px); color: #fff; font-size: clamp(18px, 2.6vw, 28px); animation: twirl 6s linear infinite; text-shadow: 0 0 14px rgb(255 255 255 / .7); }
+@keyframes tick { to { transform: translateX(-50%); } }
+@keyframes sheen { 0% { background-position: 130% 0; } 55%, 100% { background-position: -60% 0; } }
+@keyframes pop {
+  0%, 62%, 100% { transform: none; color: #1d0b05; text-shadow: none; }
+  72% { transform: translateY(-4px) scale(1.1) rotate(-1.5deg); color: #fff; text-shadow: 0 3px 0 #1d0b05, 0 0 22px rgb(255 255 255 / .75); }
+  84% { transform: translateY(1px) scale(.99); color: #fff; text-shadow: 0 2px 0 #1d0b05; }
+}
+@keyframes twirl { to { transform: rotate(360deg); } }
+
+/* ---------- video cards ---------- */
+.reel {
+  position: relative; display: block; flex: none; padding: 0; margin: 0; cursor: pointer; text-align: left; color: #fff; font: inherit;
+  aspect-ratio: 9 / 16; border-radius: 22px; overflow: hidden; background: #1a0f0b; border: 1px solid rgb(255 255 255 / .1);
+  box-shadow: 0 24px 50px rgb(0 0 0 / .55);
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), scale .35s cubic-bezier(.2,.8,.2,1), opacity .35s ease, filter .35s;
+}
+.reel.wide { aspect-ratio: 16 / 9; border-radius: 18px; }
+.reel .art { position: absolute; inset: 0; }
+.reel .clip { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; background: #000; opacity: 0; transition: opacity .4s; }
+.reel.playing .clip { opacity: 1; }
+.reel .cap { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: 12px; font-size: 13px; font-weight: 500; text-shadow: 0 1px 8px rgb(0 0 0 / .8); }
+.reel::after { content: ""; position: absolute; z-index: 1; inset: auto 0 0 0; height: 40%; background: linear-gradient(transparent, rgb(0 0 0 / .45)); pointer-events: none; }
+.reel .play { position: absolute; z-index: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 54px; height: 54px; border-radius: 50%; background: rgb(255 255 255 / .18); backdrop-filter: blur(6px); border: 1px solid rgb(255 255 255 / .35); }
+.reel .play::after { content: ""; position: absolute; left: 21px; top: 17px; border-left: 14px solid #fff; border-top: 9px solid transparent; border-bottom: 9px solid transparent; }
+.reel.playing .play, .reel.nofile .play { display: none; }
+.reel .snd, .reel .full { position: absolute; z-index: 3; bottom: 10px; width: 34px; height: 34px; border-radius: 50%; background: rgb(0 0 0 / .55); backdrop-filter: blur(6px); border: 1px solid rgb(255 255 255 / .25); display: grid; place-items: center; pointer-events: none; transition: opacity .25s, background .25s; }
+.reel .snd { right: 10px; }
+.reel .full { left: 10px; opacity: 0; }
+.reel:hover .full, .reel:focus-visible .full { opacity: 1; }
+.reel.nofile .snd, .reel.nofile .full { display: none; }
+.reel .snd svg, .reel .full svg { width: 17px; height: 17px; }
+.reel .snd .on { display: none; }
+.reel.sound .snd { background: var(--ember); border-color: transparent; }
+.reel.sound .snd .on { display: block; }
+.reel.sound .snd .off { display: none; }
+.hint { position: fixed; z-index: 50; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: rgb(20 12 10 / .92); border: 1px solid rgb(255 255 255 / .12); backdrop-filter: blur(10px); color: var(--fg); padding: 10px 18px; border-radius: 999px; font-size: 14px; max-width: calc(100vw - 32px); text-align: center; transition: opacity .4s; }
+.hint.gone { opacity: 0; pointer-events: none; }
+
+/* ---------- rotating ring (short-form) ---------- */
+.ring { --w: clamp(112px, 13vw, 168px); --R: 240px; position: relative; margin-top: 46px; perspective: 1700px; height: calc(var(--w) * 16 / 9 * 1.3 + 36px); }
+.ring-spin { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; animation: spin 48s linear infinite; }
+.ring:has(.reel:hover) .ring-spin, .ring:has(.reel:focus-visible) .ring-spin { animation-play-state: paused; }
+.ring .reel { position: absolute; width: var(--w); left: calc(var(--w) / -2); top: calc(var(--w) * -.889); backface-visibility: hidden;
+  transform: rotateY(calc(var(--i) * 360deg / var(--n))) translateZ(calc(var(--R) + var(--lift, 0px))); }
+.ring .reel:hover, .ring .reel:focus-visible { --lift: 70px; filter: brightness(1.12); }
+.ring:has(.reel:hover) .reel:not(:hover) { opacity: .5; }
+@keyframes spin { to { transform: rotateY(-360deg); } }
+.pill { display: flex; justify-content: center; margin-top: 26px; }
+.pill ul { list-style: none; margin: 0; padding: 12px 24px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; border-radius: 999px; background: rgb(19 12 10 / .75); border: 1px solid rgb(255 255 255 / .08); font-size: 14px; color: #e8ddd5; }
+.pill li { display: inline-flex; align-items: center; gap: 22px; }
+.pill li + li::before { content: ""; width: 7px; height: 7px; background: var(--ember); transform: rotate(45deg); }
+
+/* ---------- sections ---------- */
+section { padding-block: clamp(64px, 9vw, 110px); }
+.eyebrow { color: var(--ember-2); font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+h2 { font: 600 clamp(30px, 4.4vw, 48px)/1.1 var(--font-display); letter-spacing: -.03em; margin: 12px 0 0; text-wrap: balance; max-width: 720px; }
+.lead { color: var(--muted); max-width: 600px; margin-top: 14px; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 40px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 26px; }
+.card h3 { font: 600 21px/1.2 var(--font-display); margin: 0 0 8px; letter-spacing: -.02em; }
+.card p { margin: 0; color: var(--muted); font-size: 15px; }
+.ico { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: rgb(255 90 31 / .12); color: var(--ember-2); margin-bottom: 18px; }
+.ico svg { width: 20px; height: 20px; }
+
+.group { margin-top: 52px; }
+.group-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.group-head h3 { font: 600 clamp(22px, 3vw, 28px)/1.2 var(--font-display); letter-spacing: -.02em; margin: 0; }
+.group-head span { color: var(--muted); font-size: 14px; }
+.works { display: grid; gap: 16px; margin-top: 24px; }
+.works.shorts { grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+.works.longs { grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.works .reel { width: 100%; box-shadow: none; border-radius: 18px; }
+.works .reel:hover, .works .reel:focus-visible { scale: 1.06; z-index: 3; filter: brightness(1.12); }
+.works:has(.reel:hover) .reel:not(:hover) { scale: .92; opacity: .6; }
+
+.contact { text-align: center; }
+.contact h2 { margin-inline: auto; }
+.contact .lead { margin-inline: auto; }
+.mail { display: inline-block; margin-top: 26px; font: 600 clamp(22px, 4vw, 36px)/1.2 var(--font-display); letter-spacing: -.02em; border-bottom: 2px solid var(--ember); padding-bottom: 4px; overflow-wrap: anywhere; }
+.social { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+footer { padding-block: 30px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; text-align: center; }
+
+/* ---------- fullscreen player ---------- */
+.lb { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; background: rgb(6 3 2 / .92); backdrop-filter: blur(12px); padding: 16px; }
+.lb[hidden] { display: none; }
+.lb-box { position: relative; display: grid; border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 40px 120px rgb(0 0 0 / .7), 0 0 0 1px rgb(255 255 255 / .1); }
+.lb-box video { display: block; background: #000; }
+.lb-box.vert video { height: min(84vh, 920px); width: auto; max-width: 92vw; }
+.lb-box.horiz video { width: min(92vw, 1180px); height: auto; max-height: 82vh; }
+.lb-box:fullscreen { border-radius: 0; place-items: center; }
+.lb-box:fullscreen video { width: 100vw; height: 100vh; max-width: none; max-height: none; object-fit: contain; }
+.lb-bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 12px; padding: 34px 16px 14px; background: linear-gradient(transparent, rgb(0 0 0 / .78)); }
+.lb-bar button, .lb-x, .lb-nav { display: grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid rgb(255 255 255 / .22); background: rgb(20 12 10 / .6); color: #fff; cursor: pointer; font: inherit; transition: background .15s, transform .15s; }
+.lb-bar button:hover, .lb-x:hover, .lb-nav:hover { background: var(--ember); border-color: transparent; transform: scale(1.06); }
+.lb-bar svg, .lb-x svg, .lb-nav svg { width: 19px; height: 19px; }
+.lb-bar [hidden], .lb-bar svg[hidden] { display: none; }
+.lb-bar input[type=range] { flex: 1; min-width: 0; height: 4px; accent-color: var(--ember); cursor: pointer; }
+.lb-time { font-size: 13px; color: #eee; font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
+.lb-x { position: absolute; z-index: 2; top: calc(14px + env(safe-area-inset-top, 0px)); right: calc(14px + env(safe-area-inset-right, 0px)); }
+.lb-nav { position: absolute; z-index: 2; top: 50%; translate: 0 -50%; }
+.lb-nav.prev { left: calc(14px + env(safe-area-inset-left, 0px)); }
+.lb-nav.next { right: calc(14px + env(safe-area-inset-right, 0px)); }
+body.lb-open { overflow: hidden; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px) {
+  .links { display: none; }
+  .cards { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .nav .btn { padding: 9px 14px; font-size: 14px; }
+  .lb-nav { display: none; }
+  .lb-bar { gap: 8px; padding-inline: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring-spin, .tick-track, .tick-group .w, .tick-group .st, .ticker::after { animation: none; }
+  .tick-track { flex-wrap: wrap; justify-content: center; width: auto; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero gutter">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <nav class="nav" aria-label="Main">
+    <a class="logo" href="#top"><i></i><span id="brand">RageOP</span></a>
+    <div class="links">
+      <a href="#services">Services</a><a href="#projects">Projects</a><a href="#contact">Contact</a>
+    </div>
+    <a class="btn white" href="#contact">Get Started
+      <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11 11 3M5 3h6v6"/></svg></a>
+  </nav>
+
+  <div class="hero-copy" id="top">
+    <span class="badge" aria-hidden="true">✦</span>
+    <h1>Reels that keep people watching <em>to the last second</em></h1>
+    <p class="sub">I edit raw footage into clean, fast-paced Reels, Shorts and long-form videos in Premiere Pro. Sharp cuts, strong pacing, captions that read well on a phone.</p>
+    <div class="cta">
+      <a class="btn ember" href="#contact">Start a Project
+        <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11 11 3M5 3h6v6"/></svg></a>
+      <a class="btn ghost" href="#projects">See My Work</a>
+    </div>
+  </div>
+
+  <div class="ticker" id="ticker" aria-label="What I edit"><div class="tick-track" id="tickTrack"></div></div>
+
+  <div class="ring" id="ring" aria-label="Short-form reels"><div class="ring-spin" id="ringSpin"></div></div>
+
+  <div class="pill"><ul id="pill"></ul></div>
+</header>
+
+<section id="services" class="gutter">
+  <div class="wrap">
+    <div class="eyebrow">Services</div>
+    <h2>Everything between raw footage and posted</h2>
+    <p class="lead">Send the clips and a short note on the style you want. I handle the edit and send it back ready to post.</p>
+    <div class="cards">
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18h2"/></svg></div>
+        <h3>Short-form editing</h3>
+        <p>Reels, Shorts and TikToks cut for the first three seconds, with tight pacing and on-screen captions.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m10 9.5 4.5 2.5-4.5 2.5z"/></svg></div>
+        <h3>Long-form editing</h3>
+        <p>YouTube videos and podcasts with clean cuts, sound cleanup and a rhythm that holds attention.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h6"/></svg></div>
+        <h3>Captions and motion</h3>
+        <p>Readable subtitles, simple motion graphics and transitions that match your brand, without cluttering the video.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="gutter">
+  <div class="wrap">
+    <div class="eyebrow">Projects</div>
+    <h2>Selected edits</h2>
+    <p class="lead">Hover over a video to hear it. Click any video to watch it full screen.</p>
+
+    <div class="group" id="shorts-group">
+      <div class="group-head"><h3>Short-form</h3><span>Reels and Shorts</span></div>
+      <div class="works shorts" id="shorts"></div>
+    </div>
+
+    <div class="group" id="longs-group">
+      <div class="group-head"><h3>Long-form</h3><span>Full-length edits</span></div>
+      <div class="works longs" id="longs"></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="gutter contact">
+  <div class="wrap">
+    <div class="eyebrow">Contact</div>
+    <h2>Have footage that needs editing?</h2>
+    <p class="lead">Send me a message with a link to your raw clips and what you want. I reply within a day.</p>
+    <a class="mail" id="mail" href="#">hello@yourname.com</a>
+    <div class="social" id="social"></div>
+  </div>
+</section>
+
+<footer class="gutter"><span id="foot"></span></footer>
+
+<div class="hint" id="hint" role="status">Click anywhere once, then hover a reel to hear it. Click a reel to open it.</div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player">
+  <button class="lb-x" id="lbClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <button class="lb-nav prev" id="lbPrev" aria-label="Previous video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+  <button class="lb-nav next" id="lbNext" aria-label="Next video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></button>
+  <div class="lb-box vert" id="lbBox">
+    <video id="lbVideo" playsinline loop></video>
+    <div class="lb-bar">
+      <button id="lbPlay" aria-label="Play or pause">
+        <svg id="icPause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        <svg id="icPlay" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <input type="range" id="lbSeek" min="0" max="1000" value="0" aria-label="Seek">
+      <span class="lb-time" id="lbTime">0:00</span>
+      <button id="lbMute" aria-label="Mute or unmute">
+        <svg id="icSoundOn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+        <svg id="icSoundOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+      </button>
+      <button id="lbFs" aria-label="Full screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   EDIT THIS BLOCK. Everything on the page comes from here.
+   To add a video: upload the MP4 into the "videos" folder, then add a line below
+   with its exact file name (spaces and capital letters matter).
+   ========================================================= */
+const SITE = {
+  brand: "RageOP",
+  city: "Karachi, Pakistan",
+  email: "rageoppppp@gmail.com",
+  socials: [                             // replace with your real links, delete the ones you don't use
+    { label: "Instagram", url: "https://instagram.com/yourhandle" },
+    { label: "YouTube",   url: "https://youtube.com/@yourhandle" },
+    { label: "WhatsApp",  url: "https://wa.me/92XXXXXXXXXX" }
+  ],
+  pills: ["Short-form Editing", "Long-form Editing", "Captions & Motion"],
+  ticker: ["Trendy Video Edits", "Real Estate", "Gaming", "Content Creation Edits"],   // the moving text strip
+
+  // title is optional text shown on the card
+  shorts: [
+    { video: "videos/Content Kitchen Trial.mp4", title: "" },
+    { video: "videos/Asian Reel 5.mp4",          title: "" },
+    { video: "videos/Perfume Arthur.mp4",        title: "" },
+    { video: "videos/0626.mp4",                  title: "" },
+    { video: "videos/Sample Trial.mp4",          title: "" },
+    { video: "videos/Completetrial.mp4",         title: "" },
+    { video: "videos/short3.mp4",                title: "" }
+  ],
+  longs: [
+    { video: "videos/Unboxing(1)(1)(1)(1).mp4",           title: "" },
+    { video: "videos/Milestone 6 (1 Minute).mp4",         title: "" },
+    { video: "videos/Why Don't You Know This Video.mp4",  title: "" }
+  ]
+};
+
+/* ---------- build the page from SITE ---------- */
+const $ = (s) => document.querySelector(s);
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const url = (v) => encodeURI(v.video);
+
+document.title = SITE.brand + " | Video Editor in " + SITE.city.split(",")[0];
+$("#brand").textContent = SITE.brand;
+$("#foot").textContent = "© " + new Date().getFullYear() + " " + SITE.brand + " · " + SITE.city;
+$("#mail").textContent = SITE.email;
+$("#mail").href = "mailto:" + SITE.email;
+$("#social").innerHTML = SITE.socials.map((s) => `<a class="btn ghost" target="_blank" rel="noopener" href="${esc(s.url)}">${esc(s.label)}</a>`).join("");
+$("#pill").innerHTML = SITE.pills.map((p) => `<li>${esc(p)}</li>`).join("");
+
+// moving text strip: two identical groups so the loop is seamless
+(function () {
+  const words = SITE.ticker.filter(Boolean);
+  if (!words.length) { $("#ticker").remove(); return; }
+  let group = "";
+  for (let r = 0; r < 2; r++) words.forEach((w, k) => { group += `<span class="w" style="--k:${k}">${esc(w)}</span><span class="st" aria-hidden="true">✦</span>`; });
+  const g = `<div class="tick-group">${group}</div>`;
+  $("#tickTrack").innerHTML = g + g.replace('class="tick-group"', 'class="tick-group" aria-hidden="true"');
+})();
+
+const hues = [18, 200, 150, 280, 35, 230, 340, 60, 100];
+function card(v, group, i, style) {
+  const hue = hues[i % hues.length];
+  const bg = `radial-gradient(120% 70% at 30% 10%, hsl(${hue} 90% 58% / .85), transparent 60%),
+              radial-gradient(90% 60% at 80% 100%, hsl(${(hue + 40) % 360} 80% 40% / .75), transparent 65%),
+              linear-gradient(160deg, hsl(${hue} 40% 14%), #0c0706)`;
+  const label = v.title ? `<span class="cap">${esc(v.title)}</span>` : "";
+  return `<div class="reel ${group === "longs" ? "wide" : ""}" data-group="${group}" data-i="${i}" style="${style || ""}" tabindex="0" role="button" aria-label="Open video full screen">
+    <span class="art" style="background:${bg}"></span>
+    <video class="clip" src="${esc(url(v))}" muted loop playsinline preload="metadata"></video>
+    ${label}
+    <span class="play" aria-hidden="true"></span>
+    <span class="full" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></span>
+    <span class="snd" aria-hidden="true">
+      <svg class="off" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+      <svg class="on" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+    </span>
+  </div>`;
+}
+
+// rotating ring: every short sits on a circle that turns slowly; hovering pauses it
+const ring = $("#ring");
+if (SITE.shorts.length) {
+  $("#ringSpin").innerHTML = SITE.shorts.map((v, i) => card(v, "shorts", i, `--i:${i}`)).join("");
+  ring.style.setProperty("--n", SITE.shorts.length);
+  const fit = () => {                       // radius so neighbouring cards sit side by side with a small gap
+    const w = ring.querySelector(".reel").offsetWidth, n = SITE.shorts.length;
+    ring.style.setProperty("--R", (n >= 3 ? (w / 2 / Math.tan(Math.PI / n)) * 1.75 + 30 : w * .8) + "px");
+  };
+  fit(); addEventListener("resize", fit);
+} else { ring.remove(); }
+
+$("#shorts").innerHTML = SITE.shorts.map((v, i) => card(v, "shorts", i)).join("");
+$("#longs").innerHTML = SITE.longs.map((v, i) => card(v, "longs", i)).join("");
+if (!SITE.shorts.length) $("#shorts-group").remove();
+if (!SITE.longs.length) $("#longs-group").remove();
+
+/* ---------- card previews: loop muted, sound on hover ---------- */
+const visible = new Set();
+let playerOpen = false;
+function setSound(card, on) {
+  const v = card.querySelector("video");
+  if (!v || card.classList.contains("nofile")) return;
+  card.classList.toggle("sound", on);
+  v.muted = !on;
+  if (on) v.play().catch(() => { v.muted = true; card.classList.remove("sound"); v.play().catch(() => {}); });
+}
+function start(card) { const v = card.querySelector("video"); if (v && !playerOpen) v.play().catch(() => {}); }
+function stop(card) { card.classList.remove("sound"); const v = card.querySelector("video"); if (v) { v.muted = true; v.pause(); } }
+const seen = new IntersectionObserver((entries) => {
+  entries.forEach((en) => { if (en.isIntersecting) { visible.add(en.target); start(en.target); } else { visible.delete(en.target); stop(en.target); } });
+}, { rootMargin: "120px" });
+document.querySelectorAll(".reel").forEach((card) => {
+  const v = card.querySelector("video");
+  v.addEventListener("playing", () => card.classList.add("playing"));
+  v.addEventListener("error", () => { card.classList.add("nofile"); card.classList.remove("playing", "sound"); v.remove(); });
+  seen.observe(card);
+  card.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") setSound(card, true); });
+  card.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") setSound(card, false); });
+  card.addEventListener("click", () => { if (!card.classList.contains("nofile")) openPlayer(card.dataset.group, +card.dataset.i, card); });
+  card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); card.click(); } });
+});
+if (!document.querySelector(".reel")) $("#hint").remove();
+
+// browsers only allow sound after the visitor has interacted with the page once
+const hint = $("#hint");
+function dismissHint() { if (hint) hint.classList.add("gone"); ["pointerdown", "keydown", "touchstart"].forEach((t) => removeEventListener(t, dismissHint, true)); }
+["pointerdown", "keydown", "touchstart"].forEach((t) => addEventListener(t, dismissHint, true));
+setTimeout(dismissHint, 12000);
+
+/* ---------- full screen player ---------- */
+const lb = $("#lb"), lbBox = $("#lbBox"), lv = $("#lbVideo"), seek = $("#lbSeek");
+let cur = { group: "shorts", i: 0 }, lbMuted = false, lastFocus = null, seeking = false;
+const fmt = (t) => { t = Math.max(0, Math.floor(t || 0)); return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0"); };
+function paintMute() { lv.muted = lbMuted; $("#icSoundOn").hidden = lbMuted; $("#icSoundOff").hidden = !lbMuted; }
+function paintPlay() { $("#icPause").hidden = lv.paused; $("#icPlay").hidden = !lv.paused; }
+function load(group, i) {
+  const list = SITE[group]; i = (i + list.length) % list.length; cur = { group, i };
+  lbBox.className = "lb-box " + (group === "longs" ? "horiz" : "vert");
+  lv.src = url(list[i]); paintMute(); seek.value = 0; $("#lbTime").textContent = "0:00";
+  lv.play().catch(() => { lbMuted = true; paintMute(); lv.play().catch(() => {}); });
+  const many = list.length > 1;
+  $("#lbPrev").hidden = $("#lbNext").hidden = !many;
+}
+function openPlayer(group, i, from) {
+  lastFocus = from || document.activeElement; playerOpen = true;
+  document.querySelectorAll(".reel video").forEach((v) => { v.muted = true; v.pause(); });
+  document.querySelectorAll(".reel.sound").forEach((c) => c.classList.remove("sound"));
+  document.body.classList.add("lb-open"); lb.hidden = false; load(group, i); $("#lbClose").focus();
+}
+function closePlayer() {
+  if (lb.hidden) return;
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  lv.pause(); lv.removeAttribute("src"); lv.load();
+  lb.hidden = true; document.body.classList.remove("lb-open"); playerOpen = false;
+  visible.forEach(start);
+  if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+}
+function toggleFs() {
+  if (document.fullscreenElement) { document.exitFullscreen(); return; }
+  if (lbBox.requestFullscreen) lbBox.requestFullscreen().catch(() => {});
+  else if (lv.webkitEnterFullscreen) lv.webkitEnterFullscreen();   // iPhone
+}
+$("#lbClose").addEventListener("click", closePlayer);
+lb.addEventListener("click", (e) => { if (e.target === lb) closePlayer(); });
+$("#lbPrev").addEventListener("click", () => load(cur.group, cur.i - 1));
+$("#lbNext").addEventListener("click", () => load(cur.group, cur.i + 1));
+$("#lbPlay").addEventListener("click", () => { lv.paused ? lv.play() : lv.pause(); });
+lv.addEventListener("click", () => { lv.paused ? lv.play() : lv.pause(); });
+lv.addEventListener("play", paintPlay); lv.addEventListener("pause", paintPlay);
+$("#lbMute").addEventListener("click", () => { lbMuted = !lbMuted; paintMute(); if (!lbMuted) lv.play().catch(() => {}); });
+$("#lbFs").addEventListener("click", toggleFs);
+lv.addEventListener("timeupdate", () => { if (!seeking && lv.duration) seek.value = (lv.currentTime / lv.duration) * 1000; $("#lbTime").textContent = fmt(lv.currentTime); });
+seek.addEventListener("input", () => { seeking = true; if (lv.duration) lv.currentTime = (seek.value / 1000) * lv.duration; });
+seek.addEventListener("change", () => { seeking = false; });
+addEventListener("keydown", (e) => {
+  if (lb.hidden) return;
+  if (e.key === "Escape") closePlayer();
+  else if (e.key === "ArrowLeft") load(cur.group, cur.i - 1);
+  else if (e.key === "ArrowRight") load(cur.group, cur.i + 1);
+  else if (e.key.toLowerCase() === "m") $("#lbMute").click();
+  else if (e.key.toLowerCase() === "f") toggleFs();
+  else if (e.key === " " && document.activeElement.tagName !== "BUTTON" && document.activeElement !== seek) { e.preventDefault(); $("#lbPlay").click(); }
+});
+
+/* ---------- starfield ---------- */
+(function () {
+  const c = $("#stars"), ctx = c.getContext("2d");
+  function draw() {
+    const w = c.width = c.offsetWidth * devicePixelRatio, h = c.height = c.offsetHeight * devicePixelRatio;
+    ctx.clearRect(0, 0, w, h);
+    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 90; i++) {
+      const x = rnd() * w, y = rnd() * h * 0.7, r = (rnd() * 1.3 + 0.4) * devicePixelRatio;
+      ctx.fillStyle = `rgba(255,240,230,${0.25 + rnd() * 0.6})`;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+    }
+  }
+  draw(); addEventListener("resize", draw);
+})();
+</script>
+</body>
+</html>
